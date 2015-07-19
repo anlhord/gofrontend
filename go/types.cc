@@ -336,6 +336,7 @@ Type::are_subtype(const Type* lhs, const Type* rhs, const Type** wildcard, bool 
 
 
     } else {
+      // exit3
       return false;
     }
 
@@ -393,6 +394,11 @@ Type::are_subtype(const Type* lhs, const Type* rhs, const Type** wildcard, bool 
     case TYPE_CALL_MULTIPLE_RESULT:
       if (reason != NULL)
 	*reason = "invalid use of multiple-value function call";
+      return false;
+
+    case TYPE_FORWARD:
+      if (reason != NULL)
+	*reason = "type forward";
       return false;
 
     default:
