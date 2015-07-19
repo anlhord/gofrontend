@@ -319,7 +319,7 @@ Type::are_subtype(const Type* lhs, const Type* rhs, const Type** wildcard, bool 
 
   // Check type shapes.
   if (lhs->classification() != rhs->classification()) {
-	if (lhs->classification() == TYPE_NIL) {
+	if (lhs->classification() == TYPE_VOID) {
 
 	if (NULL == wildcard) {
 		return false;
