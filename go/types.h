@@ -1840,7 +1840,7 @@ class Function_type : public Type
 
   // Whether this type is the same as T.
   bool
-  is_identical(const Function_type* t, bool ignore_receiver,
+  is_identical(const Function_type* t, const Type** wildcard, bool ignore_receiver,
 	       bool errors_are_identical, std::string*) const;
 
   // Record that this is a varargs function.

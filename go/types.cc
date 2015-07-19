@@ -478,7 +478,7 @@ Type::are_identical(const Type* t1, const Type* t2, bool errors_are_identical,
       return t1->complex_type()->is_identical(t2->complex_type());
 
     case TYPE_FUNCTION:
-      return t1->function_type()->is_identical(t2->function_type(),
+      return t1->function_type()->is_identical(t2->function_type(), NULL,
 					       false,
 					       errors_are_identical,
 					       reason);
@@ -3481,7 +3481,7 @@ bool
 Function_type::is_valid_redeclaration(const Function_type* t,
 				      std::string* reason) const
 {
-  if (!this->is_identical(t, false, true, reason))
+  if (!this->is_identical(t, NULL, false, true, reason))
     return false;
 
   // A redeclaration of a function is required to use the same names
@@ -3566,10 +3566,11 @@ const Type** wildcard, bool errors_are_identical, std::string* reason)
 }
 
 // Check whether T is the same as this type.
+// When wildcard is not null, match subtypes by wildcard.
 
 bool
-Function_type::is_identical(const Function_type* t, bool ignore_receiver,
-			    bool errors_are_identical,
+Function_type::is_identical(const Function_type* t, const Type** wildcard,
+			    bool ignore_receiver, bool errors_are_identical,
 			    std::string* reason) const
 {
   if (!ignore_receiver)
@@ -7610,7 +7611,7 @@ Interface_type::implements_interface(const Type* t, std::string* reason) const
       Function_type* m_fn_type = m->type()->function_type();
       go_assert(p_fn_type != NULL && m_fn_type != NULL);
       std::string subreason;
-      if (!p_fn_type->is_identical(m_fn_type, true, true, &subreason))
+      if (!p_fn_type->is_identical(m_fn_type, NULL, true, true, &subreason))
 	{
 	  if (reason != NULL)
 	    {
