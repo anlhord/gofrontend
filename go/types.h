@@ -1832,6 +1832,12 @@ class Function_type : public Type
   bool
   is_valid_redeclaration(const Function_type* t, std::string*) const;
 
+  // Check function M-subtyping
+  static
+  bool
+  are_subtype(const Function_type* lhs, const Function_type* rhs,
+  const Type** wildcard, bool errors_are_identical, std::string* reason);
+
   // Whether this type is the same as T.
   bool
   is_identical(const Function_type* t, bool ignore_receiver,

@@ -363,7 +363,7 @@ Type::are_subtype(const Type* lhs, const Type* rhs, const Type** wildcard, bool 
 
 
     case TYPE_FUNCTION:
-      return are_subtype(lhs->function_type(), newrhs->function_type(), wildcard, errors_are_identical, reason);
+      return Function_type::are_subtype(lhs->function_type(), newrhs->function_type(), wildcard, errors_are_identical, reason);
 
 
     case TYPE_POINTER:
@@ -3553,6 +3553,16 @@ Function_type::is_valid_redeclaration(const Function_type* t,
     }
 
   return true;
+}
+
+// Check function M-subtyping
+bool
+Function_type::are_subtype(const Function_type* lhs, const Function_type* rhs,
+const Type** wildcard, bool errors_are_identical, std::string* reason)
+{
+	// FIXME: proper subtype check
+
+	return false;
 }
 
 // Check whether T is the same as this type.
