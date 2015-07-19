@@ -304,6 +304,104 @@ Type::do_traverse(Traverse*)
   return TRAVERSE_CONTINUE;
 }
 
+
+// Check M-subtyping
+bool
+Type::are_subtype(const Type* lhs, const Type* rhs, const Type** wildcard, bool errors_are_identical,
+		    std::string* reason)
+{
+
+	const Type* newrhs = rhs;
+
+// (**int) is a subtype of (**)
+// wildcard is int
+
+
+  // Check type shapes.
+  if (lhs->classification() != rhs->classification()) {
+	if (lhs->classification() == TYPE_NIL) {
+
+	if (NULL == wildcard) {
+		return false;
+	}
+
+	if (NULL == *wildcard) {
+		*wildcard = newrhs;
+		return true;
+	}
+
+		newrhs = *wildcard;
+
+
+
+
+
+	} else {
+	return false;
+	}
+
+	}
+
+
+  switch (lhs->classification())
+    {
+    case TYPE_VOID:
+    case TYPE_BOOLEAN:
+    case TYPE_STRING:
+    case TYPE_NIL:
+      // These types are always identical.
+      return true;
+
+    case TYPE_INTEGER:
+      return are_subtype(lhs->integer_type(), newrhs->integer_type(), wildcard, errors_are_identical, reason);
+
+    case TYPE_FLOAT:
+      return are_subtype(lhs->float_type(), newrhs->float_type(), wildcard, errors_are_identical, reason);
+
+
+    case TYPE_COMPLEX:
+      return are_subtype(lhs->complex_type(), newrhs->complex_type(), wildcard, errors_are_identical, reason);
+
+
+    case TYPE_FUNCTION:
+      return are_subtype(lhs->function_type(), newrhs->function_type(), wildcard, errors_are_identical, reason);
+
+
+    case TYPE_POINTER:
+      return are_subtype(lhs->points_to(), newrhs->points_to(), wildcard, errors_are_identical, reason);
+
+
+    case TYPE_STRUCT:
+      return are_subtype(lhs->struct_type(), newrhs->struct_type(), wildcard, errors_are_identical, reason);
+
+
+    case TYPE_ARRAY:
+      return are_subtype(lhs->array_type(), newrhs->array_type(), wildcard, errors_are_identical, reason);
+
+
+    case TYPE_MAP:
+      return are_subtype(lhs->map_type(), newrhs->map_type(), wildcard, errors_are_identical, reason);
+
+
+    case TYPE_CHANNEL:
+      return are_subtype(lhs->channel_type(), newrhs->channel_type(), wildcard, errors_are_identical, reason);
+
+
+    case TYPE_INTERFACE:
+      return are_subtype(lhs->interface_type(), newrhs->interface_type(), wildcard, errors_are_identical, reason);
+
+
+    case TYPE_CALL_MULTIPLE_RESULT:
+      if (reason != NULL)
+	*reason = "invalid use of multiple-value function call";
+      return false;
+
+    default:
+      go_unreachable();
+    }
+
+}
+
 // Return whether two types are identical.  If ERRORS_ARE_IDENTICAL,
 // then return true for all erroneous types; this is used to avoid
 // cascading errors.  If REASON is not NULL, optionally set *REASON to
@@ -598,8 +696,9 @@ Type::are_compatible_for_comparison(bool is_equality_op, const Type *t1,
 // the types are not assignable.
 
 bool
-Type::are_assignable(const Type* lhs, const Type* rhs, std::string* reason)
+Type::are_assignable(const Type* lhs, const Type* rhs, const Type** wildcard, std::string* reason)
 {
+  const Type* wildcard = NULL;
   // Do some checks first.  Make sure the types are defined.
   if (rhs != NULL && !rhs->is_undefined())
     {
@@ -703,6 +802,10 @@ Type::are_assignable(const Type* lhs, const Type* rhs, std::string* reason)
 	  delete[] buf;
 	}
     }
+
+  if (wildcard != NULL) {
+    return (Type::are_subtype(lhs, rhs, NULL, true, reason));
+  }
 
   return false;
 }

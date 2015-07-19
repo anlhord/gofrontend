@@ -578,6 +578,11 @@ class Type
   verify()
   { return this->do_verify(); }
 
+  // Check M-subtyping
+  static bool
+  are_subtype(const Type* lhs, const Type* rhs, const Type** wildcard,
+              bool errors_are_identical, std::string* reason);
+
   // Return true if two types are identical.  If ERRORS_ARE_IDENTICAL,
   // returns that an erroneous type is identical to any other type;
   // this is used to avoid cascading errors.  If this returns false,
