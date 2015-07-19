@@ -310,9 +310,6 @@ bool
 Type::are_subtype(const Type* lhs, const Type* rhs, const Type** wildcard, bool errors_are_identical,
 		    std::string* reason)
 {
-
-  const Type* newrhs = rhs;
-
   // (**int) is a subtype of (**)
   // wildcard is int
 
@@ -326,7 +323,7 @@ Type::are_subtype(const Type* lhs, const Type* rhs, const Type** wildcard, bool 
       }
 
       if (NULL == *wildcard) {
-        *wildcard = newrhs;
+        *wildcard = rhs;
         return true;
       } else {
         return Type::are_assignable(*wildcard, rhs, NULL, reason);
@@ -353,42 +350,42 @@ Type::are_subtype(const Type* lhs, const Type* rhs, const Type** wildcard, bool 
       return true;
 
     case TYPE_INTEGER:
-      return are_subtype(lhs->integer_type(), newrhs->integer_type(), wildcard, errors_are_identical, reason);
+      return are_subtype(lhs->integer_type(), rhs->integer_type(), wildcard, errors_are_identical, reason);
 
     case TYPE_FLOAT:
-      return are_subtype(lhs->float_type(), newrhs->float_type(), wildcard, errors_are_identical, reason);
+      return are_subtype(lhs->float_type(), rhs->float_type(), wildcard, errors_are_identical, reason);
 
 
     case TYPE_COMPLEX:
-      return are_subtype(lhs->complex_type(), newrhs->complex_type(), wildcard, errors_are_identical, reason);
+      return are_subtype(lhs->complex_type(), rhs->complex_type(), wildcard, errors_are_identical, reason);
 
 
     case TYPE_FUNCTION:
-      return Function_type::are_subtype(lhs->function_type(), newrhs->function_type(), wildcard, errors_are_identical, reason);
+      return Function_type::are_subtype(lhs->function_type(), rhs->function_type(), wildcard, errors_are_identical, reason);
 
 
     case TYPE_POINTER:
-      return are_subtype(lhs->points_to(), newrhs->points_to(), wildcard, errors_are_identical, reason);
+      return are_subtype(lhs->points_to(), rhs->points_to(), wildcard, errors_are_identical, reason);
 
 
     case TYPE_STRUCT:
-      return are_subtype(lhs->struct_type(), newrhs->struct_type(), wildcard, errors_are_identical, reason);
+      return are_subtype(lhs->struct_type(), rhs->struct_type(), wildcard, errors_are_identical, reason);
 
 
     case TYPE_ARRAY:
-      return are_subtype(lhs->array_type(), newrhs->array_type(), wildcard, errors_are_identical, reason);
+      return are_subtype(lhs->array_type(), rhs->array_type(), wildcard, errors_are_identical, reason);
 
 
     case TYPE_MAP:
-      return are_subtype(lhs->map_type(), newrhs->map_type(), wildcard, errors_are_identical, reason);
+      return are_subtype(lhs->map_type(), rhs->map_type(), wildcard, errors_are_identical, reason);
 
 
     case TYPE_CHANNEL:
-      return are_subtype(lhs->channel_type(), newrhs->channel_type(), wildcard, errors_are_identical, reason);
+      return are_subtype(lhs->channel_type(), rhs->channel_type(), wildcard, errors_are_identical, reason);
 
 
     case TYPE_INTERFACE:
-      return are_subtype(lhs->interface_type(), newrhs->interface_type(), wildcard, errors_are_identical, reason);
+      return are_subtype(lhs->interface_type(), rhs->interface_type(), wildcard, errors_are_identical, reason);
 
 
     case TYPE_CALL_MULTIPLE_RESULT:
