@@ -275,8 +275,9 @@ Parse::type()
     }
   else if (token->is_op(OPERATOR_RPAREN) || token->is_op(OPERATOR_COMMA)) {
 
-      error_at(token->location(), "macro type");
-      return Type::make_error_type();
+//	return this->void_type();
+//      error_at(token->location(), "macro type");
+      return Type::make_void_type();
 
    }
   else
@@ -631,6 +632,16 @@ Parse::field_decl(Struct_field_list* sfl)
 	    sfl->back().set_tag(tag);
 	}
     }
+}
+
+// VoidType =  .
+
+
+Type*
+Parse::void_type()
+{
+  go_assert(this->peek_token()->is_op(OPERATOR_RPAREN) || this->peek_token()->is_op(OPERATOR_COMMA));
+  return Type::make_nil_type();
 }
 
 // PointerType = "*" Type .

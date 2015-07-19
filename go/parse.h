@@ -166,6 +166,7 @@ class Parse
   Type* type_name(bool issue_error);
   Type* array_type(bool may_use_ellipsis);
   Type* map_type();
+  Type* void_type();
   Type* struct_type();
   void field_decl(Struct_field_list*);
   Type* pointer_type();
