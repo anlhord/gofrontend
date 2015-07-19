@@ -273,6 +273,12 @@ Parse::type()
 	}
       return ret;
     }
+  else if (token->is_op(OPERATOR_ELLIPSIS) || token->is_op(OPERATOR_COMMA)) {
+
+      error_at(token->location(), "macro type");
+      return Type::make_error_type();
+
+   }
   else
     {
       error_at(token->location(), "expected type");
