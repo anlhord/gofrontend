@@ -698,7 +698,7 @@ Type::are_compatible_for_comparison(bool is_equality_op, const Type *t1,
 bool
 Type::are_assignable(const Type* lhs, const Type* rhs, const Type** wildcard, std::string* reason)
 {
-  const Type* wildcard = NULL;
+  const Type* wc = NULL;
   // Do some checks first.  Make sure the types are defined.
   if (rhs != NULL && !rhs->is_undefined())
     {
@@ -803,7 +803,7 @@ Type::are_assignable(const Type* lhs, const Type* rhs, const Type** wildcard, st
 	}
     }
 
-  if (wildcard != NULL) {
+  if (wc != NULL) {
     return (Type::are_subtype(lhs, rhs, NULL, true, reason));
   }
 
