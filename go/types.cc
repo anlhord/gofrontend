@@ -3562,7 +3562,7 @@ const Type** wildcard, bool errors_are_identical, std::string* reason)
 {
 	// FIXME: proper subtype check
 
-	return false;
+	return lhs->is_identical(rhs, wildcard, false, errors_are_identical, reason);
 }
 
 // Check whether T is the same as this type.
