@@ -311,36 +311,35 @@ Type::are_subtype(const Type* lhs, const Type* rhs, const Type** wildcard, bool 
 		    std::string* reason)
 {
 
-	const Type* newrhs = rhs;
+  const Type* newrhs = rhs;
 
-// (**int) is a subtype of (**)
-// wildcard is int
+  // (**int) is a subtype of (**)
+  // wildcard is int
 
 
   // Check type shapes.
   if (lhs->classification() != rhs->classification()) {
-	if (lhs->classification() == TYPE_VOID) {
+    if (lhs->classification() == TYPE_VOID) {
 
-	if (NULL == wildcard) {
-		return false;
-	}
+      if (NULL == wildcard) {
+        return false;
+      }
 
-	if (NULL == *wildcard) {
-		*wildcard = newrhs;
-		return true;
-	}
-
-		newrhs = *wildcard;
-
-
+      if (NULL == *wildcard) {
+        *wildcard = newrhs;
+        return true;
+      } else {
+        return Type::are_assignable(*wildcard, rhs, NULL, reason);
+      }
 
 
 
-	} else {
-	return false;
-	}
 
-	}
+    } else {
+      return false;
+    }
+
+  }
 
 
   switch (lhs->classification())

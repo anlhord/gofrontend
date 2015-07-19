@@ -9250,6 +9250,12 @@ Call_expression::do_check_types(Gogo*)
 	  this->check_argument_type(i + 1, pt->type(), (*pa)->type(),
 				    wildcard_ptr, (*pa)->location(), false);
 	}
+
+      if (true) { /*FIXME: if it is macro function*/
+	if (wildcard_type != NULL) {
+        }
+      }
+
       if (pa != this->args_->end())
 	this->report_error(_("too many arguments"));
     }
