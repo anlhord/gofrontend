@@ -1777,7 +1777,7 @@ class Function_type : public Type
 		Typed_identifier_list* results, Location location)
     : Type(TYPE_FUNCTION),
       receiver_(receiver), parameters_(parameters), results_(results),
-      location_(location), is_varargs_(false), is_builtin_(false),
+      location_(location), is_varargs_(false), is_builtin_(false), is_macro_(false),
       fnbtype_(NULL)
   { }
 
@@ -1805,6 +1805,11 @@ class Function_type : public Type
   bool
   is_builtin() const
   { return this->is_builtin_; }
+
+  // Whether this is a macro function.
+  bool
+  is_macro() const
+  { return this->is_macro_; }
 
   // The location where this type was defined.
   Location
@@ -1835,6 +1840,11 @@ class Function_type : public Type
   void
   set_is_builtin()
   { this->is_builtin_ = true; }
+
+  // Record that this is a macro function.
+  void
+  set_is_macro()
+  { this->is_macro_ = true; }
 
   // Import a function type.
   static Function_type*
