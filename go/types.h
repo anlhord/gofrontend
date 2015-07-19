@@ -1947,6 +1947,10 @@ class Function_type : public Type
   // Whether this is a special builtin function which can not simply
   // be called.  This is used for len, cap, etc.
   bool is_builtin_;
+  // Whether this function is a macro function. A macro function
+  // has a macro receiver, macro argument, macro return value, or a macro
+  // function callback argument.
+  bool is_macro_;
   // The backend representation of this type for backend function
   // declarations and definitions.
   Btype* fnbtype_;
