@@ -589,8 +589,8 @@ Type::are_compatible_for_comparison(bool is_equality_op, const Type *t1,
 				    const Type *t2, std::string *reason)
 {
   if (t1 != t2
-      && !Type::are_assignable(t1, t2, NULL)
-      && !Type::are_assignable(t2, t1, NULL))
+      && !Type::are_assignable(t1, t2, NULL, NULL)
+      && !Type::are_assignable(t2, t1, NULL, NULL))
     {
       if (reason != NULL)
 	*reason = "incompatible types in binary expression";
@@ -818,7 +818,7 @@ bool
 Type::are_convertible(const Type* lhs, const Type* rhs, std::string* reason)
 {
   // The types are convertible if they are assignable.
-  if (Type::are_assignable(lhs, rhs, reason))
+  if (Type::are_assignable(lhs, rhs, NULL, reason))
     return true;
 
   // The types are convertible if they have identical underlying

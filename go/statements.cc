@@ -409,7 +409,7 @@ Temporary_statement::do_check_types(Gogo*)
   if (this->type_ != NULL && this->init_ != NULL)
     {
       std::string reason;
-      if (!Type::are_assignable(this->type_, this->init_->type(), &reason))
+      if (!Type::are_assignable(this->type_, this->init_->type(), NULL, &reason))
 	{
 	  if (reason.empty())
 	    error_at(this->location(), "incompatible types in assignment");
@@ -618,7 +618,7 @@ Assignment_statement::do_check_types(Gogo*)
     }
 
   std::string reason;
-  if (!Type::are_assignable(lhs_type, rhs_type, &reason))
+  if (!Type::are_assignable(lhs_type, rhs_type, NULL, &reason))
     {
       if (reason.empty())
 	error_at(this->location(), "incompatible types in assignment");
@@ -2770,7 +2770,7 @@ Return_statement::do_lower(Gogo*, Named_object* function, Block* enclosing,
       e->determine_type(&type_context);
 
       std::string reason;
-      if (Type::are_assignable(rvtype, e->type(), &reason))
+      if (Type::are_assignable(rvtype, e->type(), NULL, &reason))
 	{
 	  Expression* ve = Expression::make_var_reference(rv, e->location());
 	  lhs->push_back(ve);
@@ -3454,8 +3454,8 @@ Case_clauses::Case_clause::check_types(Type* type)
 	   p != this->cases_->end();
 	   ++p)
 	{
-	  if (!Type::are_assignable(type, (*p)->type(), NULL)
-	      && !Type::are_assignable((*p)->type(), type, NULL))
+	  if (!Type::are_assignable(type, (*p)->type(), NULL, NULL)
+	      && !Type::are_assignable((*p)->type(), type, NULL, NULL))
 	    {
 	      error_at((*p)->location(),
 		       "type mismatch between switch value and case clause");
@@ -4440,7 +4440,7 @@ Send_statement::do_check_types(Gogo*)
       return;
     }
   Type* element_type = channel_type->element_type();
-  if (!Type::are_assignable(element_type, this->val_->type(), NULL))
+  if (!Type::are_assignable(element_type, this->val_->type(), NULL, NULL))
     {
       this->report_error(_("incompatible types in send"));
       return;

@@ -616,7 +616,8 @@ class Type
   // with type LHS.  This is not an equivalence relation.  If this
   // returns false, and REASON is not NULL, it sets *REASON.
   static bool
-  are_assignable(const Type* lhs, const Type* rhs, std::string* reason);
+  are_assignable(const Type* lhs, const Type* rhs, const Type** wildcard,
+                 std::string* reason);
 
   // Return true if a value with type RHS may be converted to type
   // LHS.  If this returns false, and REASON is not NULL, it sets

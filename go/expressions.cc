@@ -5563,8 +5563,8 @@ Binary_expression::do_check_types(Gogo*)
 	  this->report_error(_("invalid comparison of nil with nil"));
 	  return;
 	}
-      if (!Type::are_assignable(left_type, right_type, NULL)
-	  && !Type::are_assignable(right_type, left_type, NULL))
+      if (!Type::are_assignable(left_type, right_type, NULL, NULL)
+	  && !Type::are_assignable(right_type, left_type, NULL, NULL))
 	{
 	  this->report_error(_("incompatible types in binary expression"));
 	  return;
@@ -8020,7 +8020,7 @@ Builtin_call_expression::do_check_types(Gogo*)
 	// type.
 	Type* arg2_type = Type::make_array_type(e, NULL);
 	std::string reason;
-	if (!Type::are_assignable(arg2_type, args->back()->type(), &reason))
+	if (!Type::are_assignable(arg2_type, args->back()->type(), NULL, &reason))
 	  {
 	    if (reason.empty())
 	      this->report_error(_("argument 2 has invalid type"));
@@ -9116,7 +9116,7 @@ Call_expression::check_argument_type(int i, const Type* parameter_type,
 				     bool issued_error)
 {
   std::string reason;
-  if (!Type::are_assignable(parameter_type, argument_type, &reason))
+  if (!Type::are_assignable(parameter_type, argument_type, NULL, &reason))
     {
       if (!issued_error)
 	{
@@ -9168,7 +9168,7 @@ Call_expression::do_check_types(Gogo*)
       // as pointers.
       std::string reason;
       if (!Type::are_assignable(rtype->deref(), first_arg->type()->deref(),
-				&reason))
+				NULL, &reason))
 	{
 	  if (reason.empty())
 	    this->report_error(_("incompatible type for receiver"));
@@ -10727,7 +10727,7 @@ Map_index_expression::do_check_types(Gogo*)
   Map_type* mt = this->get_map_type();
   if (mt == NULL)
     return;
-  if (!Type::are_assignable(mt->key_type(), this->index_->type(), &reason))
+  if (!Type::are_assignable(mt->key_type(), this->index_->type(), NULL, &reason))
     {
       if (reason.empty())
 	this->report_error(_("incompatible type for map index"));
@@ -11869,7 +11869,7 @@ Struct_construction_expression::do_check_types(Gogo*)
 	continue;
 
       std::string reason;
-      if (!Type::are_assignable(pf->type(), (*pv)->type(), &reason))
+      if (!Type::are_assignable(pf->type(), (*pv)->type(), NULL, &reason))
 	{
 	  if (reason.empty())
 	    error_at((*pv)->location(),
@@ -12160,7 +12160,7 @@ Array_construction_expression::do_check_types(Gogo*)
        ++pv, ++i)
     {
       if (*pv != NULL
-	  && !Type::are_assignable(element_type, (*pv)->type(), NULL))
+	  && !Type::are_assignable(element_type, (*pv)->type(), NULL, NULL))
 	{
 	  error_at((*pv)->location(),
 		   "incompatible type for element %d in composite literal",
@@ -12689,7 +12689,7 @@ Map_construction_expression::do_check_types(Gogo*)
        pv != this->vals_->end();
        ++pv, ++i)
     {
-      if (!Type::are_assignable(key_type, (*pv)->type(), NULL))
+      if (!Type::are_assignable(key_type, (*pv)->type(), NULL, NULL))
 	{
 	  error_at((*pv)->location(),
 		   "incompatible type for element %d key in map construction",
@@ -12697,7 +12697,7 @@ Map_construction_expression::do_check_types(Gogo*)
 	  this->set_is_error();
 	}
       ++pv;
-      if (!Type::are_assignable(val_type, (*pv)->type(), NULL))
+      if (!Type::are_assignable(val_type, (*pv)->type(), NULL, NULL))
 	{
 	  error_at((*pv)->location(),
 		   ("incompatible type for element %d value "
