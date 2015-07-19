@@ -3617,13 +3617,24 @@ Function_type::is_identical(const Function_type* t, const Type** wildcard,
 	      return false;
 	    }
 
-	  if (!Type::are_identical(p1->type(), p2->type(),
+          if (wildcard == NULL) {
+
+	    if (!Type::are_identical(p1->type(), p2->type(),
+				     errors_are_identical, NULL))
+	      {
+	        if (reason != NULL)
+		  *reason = _("different parameter types");
+	        return false;
+	      }
+            } else {
+	  if (!Type::are_subtype(p1->type(), p2->type(), wildcard,
 				   errors_are_identical, NULL))
 	    {
-	      if (reason != NULL)
-		*reason = _("different parameter types");
-	      return false;
+	        if (reason != NULL)
+		  *reason = _("different parameter subtypes");
+	        return false;
 	    }
+          }
 	}
       if (p1 != parms1->end())
 	{
@@ -3661,14 +3672,24 @@ Function_type::is_identical(const Function_type* t, const Type** wildcard,
 		*reason = _("different number of results");
 	      return false;
 	    }
-
-	  if (!Type::are_identical(res1->type(), res2->type(),
-				   errors_are_identical, NULL))
-	    {
-	      if (reason != NULL)
-		*reason = _("different result types");
-	      return false;
-	    }
+          if (wildcard == NULL)
+            {
+	      if (!Type::are_identical(res1->type(), res2->type(),
+				       errors_are_identical, NULL))
+	        {
+	          if (reason != NULL)
+		    *reason = _("different result types");
+	          return false;
+	        }
+            } else {
+	      if (!Type::are_subtype(res1->type(), res2->type(), wildcard,
+				     errors_are_identical, NULL))
+	        {
+	          if (reason != NULL)
+		    *reason = _("different result subtypes");
+	          return false;
+	        }
+            }
 	}
       if (res1 != results1->end())
 	{
