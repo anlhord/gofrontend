@@ -9223,6 +9223,17 @@ Call_expression::do_check_types(Gogo*)
     }
   else
     {
+
+      Type* wildcard_type = NULL;
+      const Type** wildcard_ptr = NULL;
+
+      if (true) { /*FIXME: if it is macro function*/
+
+        /* enable wildcard type matching */
+        wildcard_ptr = (const Type**) &wildcard_type;
+
+      }
+
       int i = 0;
       Expression_list::const_iterator pa = this->args_->begin();
       if (is_method)
@@ -9236,8 +9247,8 @@ Call_expression::do_check_types(Gogo*)
 	      this->report_error(_("not enough arguments"));
 	      return;
 	    }
-	  this->check_argument_type(i + 1, pt->type(), (*pa)->type(), NULL,
-				    (*pa)->location(), false);
+	  this->check_argument_type(i + 1, pt->type(), (*pa)->type(),
+				    wildcard_ptr, (*pa)->location(), false);
 	}
       if (pa != this->args_->end())
 	this->report_error(_("too many arguments"));
