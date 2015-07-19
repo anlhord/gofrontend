@@ -1783,7 +1783,7 @@ class Call_expression : public Expression
 
  private:
   bool
-  check_argument_type(int, const Type*, const Type*, Location, bool);
+  check_argument_type(int, const Type*, const Type*, const Type**, Location, bool);
 
   Expression*
   interface_method_function(Interface_field_reference_expression*,

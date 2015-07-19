@@ -8815,7 +8815,7 @@ Call_expression::lower_varargs(Gogo* gogo, Named_object* function,
 	      // Check types here so that we get a better message.
 	      Type* patype = (*pa)->type();
 	      Location paloc = (*pa)->location();
-	      if (!this->check_argument_type(i, element_type, patype,
+	      if (!this->check_argument_type(i, element_type, patype, NULL,
 					     paloc, issued_error))
 		continue;
 	      vals->push_back(*pa);
@@ -9112,11 +9112,12 @@ Call_expression::determining_types()
 bool
 Call_expression::check_argument_type(int i, const Type* parameter_type,
 				     const Type* argument_type,
+				     const Type** wildcard_type,
 				     Location argument_location,
 				     bool issued_error)
 {
   std::string reason;
-  if (!Type::are_assignable(parameter_type, argument_type, NULL, &reason))
+  if (!Type::are_assignable(parameter_type, argument_type, wildcard_type, &reason))
     {
       if (!issued_error)
 	{
@@ -9235,7 +9236,7 @@ Call_expression::do_check_types(Gogo*)
 	      this->report_error(_("not enough arguments"));
 	      return;
 	    }
-	  this->check_argument_type(i + 1, pt->type(), (*pa)->type(),
+	  this->check_argument_type(i + 1, pt->type(), (*pa)->type(), NULL,
 				    (*pa)->location(), false);
 	}
       if (pa != this->args_->end())
